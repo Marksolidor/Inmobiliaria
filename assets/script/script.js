@@ -42,3 +42,18 @@ const propiedadesJSON = [
       meters: 500,
     },
   ]
+
+ //Cards creation
+ const dataLoad = function (image, name, rooms, meters, description) {
+    template += `<div class="house"><div class="img" style=" background-image: url('${image}');"></div>
+    <section>
+    <h5>${name}</h5>
+    <div class="d-flex justify-content-between">
+    <p>Cuartos: ${rooms}</p>
+    <p>Metros: ${meters}</p>
+    </div>
+    <p class="my-3">${description}</p>
+    <button class="btn btn-info">Ver más</button>
+    </section>
+    </div>`
+  } 
