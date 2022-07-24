@@ -68,3 +68,39 @@ const propiedadesJSON = [
   let template = '' 
   let numReg = 0 
   
+    //Reusable function
+    const setview = function (click, rommsSearch, MeterMinSearch, MeterMaxSearch) {
+        //Check for empty inputs
+        if (
+          click === 'Search' &&
+          (rooms.value === '' || metersMin.value === '' || metersMax.value === '')
+        ) {
+          alert('Rellene por favor todos los campos de búsqueda')
+          return
+      
+          //Min square meters can't be >= than Max square meters
+        } else if (metersMin.value >= metersMax.value) {
+          alert('El mínimo de metros no puede ser mayor a máximo de metros')
+          return
+        } else {
+          //Refresh the number of card to avoid to copy existing cards
+          template = ''
+          html.innerHTML = ''
+          numReg = 0
+          //
+          for (let prop of propiedadesJSON) {
+            if (
+              prop.rooms >= rommsSearch &&
+              prop.meters >= MeterMinSearch &&
+              prop.meters <= MeterMaxSearch
+            ) {
+              //Data compilation from each variable
+              numReg = numReg + 1
+              dataLoad(prop.image, prop.name, prop.rooms, prop.meters, prop.description)
+            }
+          }
+          //Send the data to the html
+          html.innerHTML = template
+          total.innerHTML = `Total: ${numReg}`
+        }
+      }
