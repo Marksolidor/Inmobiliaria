@@ -68,39 +68,46 @@ const propiedadesJSON = [
   let template = '' 
   let numReg = 0 
   
-    //Reusable function
-    const setview = function (click, rommsSearch, MeterMinSearch, MeterMaxSearch) {
-        //Check for empty inputs
+
+  //Reusable function
+  const setview = function (click, rommsSearch, MeterMinSearch, MeterMaxSearch) {
+    /***********************Valida que los datos ingresados no estén vacíos***************************************/
+    if (
+      click === 'Search' &&
+      (rooms.value === '' || metersMin.value === '' || metersMax.value === '')
+    ) {
+      alert('Debes ingresar todos los parámetros de búsqueda')
+      return
+  
+      /***********************Valida que el mínimo de metros no sea mayor que el maximo de metros ingresados*******/
+    } else if (metersMin.value > metersMax.value) {
+      alert('El mínimo de metros no puede ser mayor a máximo de metros')
+      return
+    } else {
+      /*************Resetea los parámetros necesario para desplegar la información de la nueva búsqueda*************/
+      template = ''
+      html.innerHTML = ''
+      numReg = 0
+      /*************comienza el bucle con un if para filtra la información que se mostrara en el HTML****************/
+      for (let prop of propiedadesJSON) {
         if (
-          click === 'Search' &&
-          (rooms.value === '' || metersMin.value === '' || metersMax.value === '')
+          prop.rooms >= rommsSearch &&
+          prop.meters >= MeterMinSearch &&
+          prop.meters <= MeterMaxSearch
         ) {
-          alert('Rellene por favor todos los campos de búsqueda')
-          return
-      
-          //Min square meters can't be >= than Max square meters
-        } else if (metersMin.value >= metersMax.value) {
-          alert('El mínimo de metros no puede ser mayor a máximo de metros')
-          return
-        } else {
-          //Refresh the number of card to avoid to copy existing cards
-          template = ''
-          html.innerHTML = ''
-          numReg = 0
-          //
-          for (let prop of propiedadesJSON) {
-            if (
-              prop.rooms >= rommsSearch &&
-              prop.meters >= MeterMinSearch &&
-              prop.meters <= MeterMaxSearch
-            ) {
-              //Data compilation from each variable
-              numReg = numReg + 1
-              dataLoad(prop.image, prop.name, prop.rooms, prop.meters, prop.description)
-            }
-          }
-          //Send the data to the html
-          html.innerHTML = template
-          total.innerHTML = `Total: ${numReg}`
+          /*************Se comienza a recopilar la información en las variables por cada ciclo del bucle************/
+          numReg = numReg + 1
+          dataLoad(prop.image, prop.name, prop.rooms, prop.meters, prop.description)
         }
       }
+      /****************Se Pasa la información recopilada en el bucle (fuera de este) al HTML******************/
+      html.innerHTML = template
+      total.innerHTML = `Total: ${numReg}`
+    }
+  }
+  /*************Se llama a la función setview para realizar la búsqueda desde el botón********************/
+  buttonSearch.addEventListener('click', () => {
+    setview('Search', rooms.value, metersMin.value, metersMax.value)
+  })
+  /****Se llama a la función setview para realizar al momento de cargar la pagina con toda la data********/
+  setview('noSearch', -Infinity, -Infinity, Infinity)
